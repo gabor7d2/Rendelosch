@@ -23,7 +23,12 @@ public class MemoryProductFormRepository : IProductFormRepository
         _productForms.Add(sampleForm1);
         _productForms.Add(sampleForm2);
     }
-    
+
+    public List<ProductForm> GetProductForms()
+    {
+        return _productForms;
+    }
+
     public string CreateProductForm(string formTitle)
     {
         var guid = Guid.NewGuid().ToString();

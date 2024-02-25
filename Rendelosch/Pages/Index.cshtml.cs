@@ -13,6 +13,11 @@ public class Index : PageModel
         _repository = repository;
     }
     
+    public IProductFormRepository GetRepository()
+    {
+        return _repository;
+    }
+    
     public void OnGet()
     {
         
