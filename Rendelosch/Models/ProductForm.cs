@@ -1,6 +1,8 @@
-﻿namespace Rendelosch.Models;
+﻿using System.Collections;
 
-public class ProductForm
+namespace Rendelosch.Models;
+
+public class ProductForm : IEnumerable
 {
     public readonly string Id;
     public readonly string Title;
@@ -14,5 +16,10 @@ public class ProductForm
         Id = id;
         Title = title;
         Fields = fields;
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        throw new NotImplementedException();
     }
 }

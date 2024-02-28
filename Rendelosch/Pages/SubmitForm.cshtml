@@ -1,0 +1,27 @@
+﻿@page "{Id}"
+@model Rendelosch.Pages.SubmitForm
+
+@{
+    ViewData["Title"] = "Submit";
+}
+
+<form method="post" >
+    <div class="container-lg">
+        <h1>@Model.Repository.GetProductForm(Request.RouteValues["Id"].ToString()).Title</h1>
+        <div>
+            @foreach (var productForm in Model.Repository.GetProductForm(Request.RouteValues["Id"].ToString()).Fields)
+            {
+                <div class="card-title col-6 m-0 me-3">
+                    <Label >
+                        @productForm.Name
+                    </Label>
+                    <input class="form-control col-6"/>
+                </div>
+                
+            }
+            <input class="btn btn-primary mt-4" type="submit"/>
+        </div>
+    </div>
+</form>
+
+
