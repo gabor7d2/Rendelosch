@@ -5,8 +5,13 @@ namespace Rendelosch.Repository;
 public interface IProductFormRepository
 {
     public List<ProductForm> GetProductForms();
-    
-    public string CreateProductForm(string formTitle);
 
-    public bool AddFieldToProductForm(string formId, string fieldName);
+    public ProductForm? GetProductForm(string formId);
+    
+    public ProductForm CreateProductForm(string formTitle, List<Field> formFields);
+    
+    
+    public List<Submission>? GetSubmissionsForProductForm(string formId);
+    
+    public Submission? AddSubmissionToProductForm(string formId, Dictionary<string, string> fieldData);
 }

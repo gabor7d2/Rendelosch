@@ -1,22 +1,22 @@
 @page
 @model Rendelosch.Pages.Index
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Home";
 }
 
 <div class="container-lg">
-    <form method="post">
-        <a class="btn btn-primary my-4">Új űrlap létrehozása</a>
-    </form>
+    <a class="btn btn-primary my-4" asp-page="CreateProductForm">Create Product Form</a>
     <div>
         @{
-            foreach (var productForm in Model.GetRepository().GetProductForms())
+            foreach (var productForm in Model.Repository.GetProductForms())
             {
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="d-flex flex-row align-items-center">
-                            <h5 class="card-title m-0 me-3">@productForm.Title</h5>
-                            <a class="btn btn-outline-primary">Kitöltés</a>
+                            <a asp-page="SubmitForm" asp-route-id="@productForm.Id">
+                                <h5 class="card-title m-0 me-3">@productForm.Title</h5>
+                            </a>
+                            <a class="btn btn-outline-primary mx-1" asp-page="SubmittedForms" asp-route-id="@productForm.Id">Submissions</a>
                         </div>
                     </div>
                 </div>

@@ -6,25 +6,10 @@ namespace Rendelosch.Pages;
 
 public class Index : PageModel
 {
-    private readonly IProductFormRepository _repository;
-
+    public IProductFormRepository Repository { get; }
+    
     public Index(IProductFormRepository repository)
     {
-        _repository = repository;
-    }
-    
-    public IProductFormRepository GetRepository()
-    {
-        return _repository;
-    }
-    
-    public void OnGet()
-    {
-        
-    }
-
-    public void OnPost()
-    {
-        
+        Repository = repository;
     }
 }
