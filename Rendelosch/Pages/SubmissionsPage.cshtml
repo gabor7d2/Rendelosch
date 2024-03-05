@@ -1,0 +1,39 @@
+﻿@page "{Id}"
+@model Rendelosch.Pages.Shared.SubmissionsPage
+
+@{
+    ViewData["Title"] = "SubmittedForms";
+}
+
+<form method="post" >
+    <div class="container-lg">
+        @{
+            var id = Request.RouteValues["Id"]?.ToString();
+            if (id is null)
+            {
+            }
+        }
+        <h1>@Model.Repository.GetProductForm(id).Title</h1>
+        <div>
+            @foreach (var submission in Model.Repository.GetSubmissionsForProductForm(Request.RouteValues["Id"].ToString()))
+        {
+            <div class="card mb-3 pt-0">
+                    <div class="card-body container row">
+                        @{
+            foreach (var field in submission.FieldData)
+            {
+                <div class="col-4">
+                                    <h5 class="card-title">@field.Key.Name</h5>
+
+                                    <p>@field.Value</p>
+                                </div>
+
+            }
+            }
+                    </div>
+                </div>
+        }
+        </div>
+    </div>
+</form>
+
