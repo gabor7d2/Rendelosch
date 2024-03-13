@@ -15,7 +15,8 @@
       "launchBrowser": false,
       "applicationUrl": "http://localhost:5081",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MONGODB_URI":  "mongodb://localhost:27017"
       }
     },
     "https": {

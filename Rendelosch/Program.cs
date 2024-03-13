@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-builder.Services.AddSingleton<IProductFormRepository>(new MemoryProductFormRepository());
+builder.Services.AddSingleton<IProductFormRepository>(new MongoDBProductFormRepository());
 
 var app = builder.Build();
 

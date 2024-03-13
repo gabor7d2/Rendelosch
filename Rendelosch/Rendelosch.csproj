@@ -10,4 +10,8 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
+  </ItemGroup>
+
 </Project>
