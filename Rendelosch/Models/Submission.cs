@@ -6,9 +6,11 @@ public class Submission
 {
     [BsonId]
     public readonly string Id;
-
-    public readonly string ProductFormId;
     
+    [BsonElement("formId")]
+    public readonly string FormId;
+    
+    [BsonElement("fieldData")]
     public readonly Dictionary<string, string> FieldData;
 
     public Submission(string id, Dictionary<string, string> fieldData)
