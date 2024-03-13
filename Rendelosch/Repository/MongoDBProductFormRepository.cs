@@ -51,10 +51,8 @@ public class MongoDBProductFormRepository : IProductFormRepository
         throw new NotImplementedException();
     }
 
-    public List<Submission>? GetSubmissionsForProductForm(string formId)
-    {
-        throw new NotImplementedException();
-    }
+    public List<Submission>? GetSubmissionsForProductForm(string formId) =>
+        submissionsCollection.Find(s => s.FormId == formId).ToList();
 
     public Submission? AddSubmissionToProductForm(string formId, Dictionary<string, string> fieldData)
     {
