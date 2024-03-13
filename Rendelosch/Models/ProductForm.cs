@@ -14,7 +14,7 @@ public class ProductForm
     
     [BsonElement("fields")]
     public readonly List<Field> Fields;
-
+    [BsonConstructor]
     public ProductForm(string id, string title, List<Field> fields)
     {
         Id = id;

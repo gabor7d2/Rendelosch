@@ -20,8 +20,8 @@ public class MongoDBProductFormRepository : IProductFormRepository
         }
 
         var client = new MongoClient(connectionString);
-        ConventionRegistry.Register("CamelCase",
-            new ConventionPack { new CamelCaseElementNameConvention() }, _ => true);
+        //ConventionRegistry.Register("CamelCase",
+       //     new ConventionPack { new CamelCaseElementNameConvention() }, _ => true);
 
         var database = client.GetDatabase("rendelosch");
         productFormsCollection = database.GetCollection<ProductForm>("productForms");
@@ -38,12 +38,13 @@ public class MongoDBProductFormRepository : IProductFormRepository
 
     public List<ProductForm> GetProductForms()
     {
-        throw new NotImplementedException();
+        return productFormsCollection.Find(p => true).ToList();
+        
     }
 
     public ProductForm? GetProductForm(string formId)
     {
-        throw new NotImplementedException();
+        return productFormsCollection.Find(p => p.Id == formId).FirstOrDefault();
     }
 
     public ProductForm CreateProductForm(string formTitle, List<Field> formFields)
