@@ -7,6 +7,9 @@ namespace Rendelosch.Repository;
 
 public class MongoDBProductFormRepository : IProductFormRepository
 {
+    private readonly IMongoCollection<ProductForm> productFormsCollection;
+    private readonly IMongoCollection<Submission> submissionsCollection;
+    
     public MongoDBProductFormRepository()
     {
         var connectionString = Environment.GetEnvironmentVariable("MONGODB_URI");
@@ -21,8 +24,8 @@ public class MongoDBProductFormRepository : IProductFormRepository
             new ConventionPack { new CamelCaseElementNameConvention() }, _ => true);
 
         var database = client.GetDatabase("rendelosch");
-        var productFormsCollection = database.GetCollection<ProductForm>("productForms");
-        var submissionsCollection = database.GetCollection<Submission>("submissions");
+        productFormsCollection = database.GetCollection<ProductForm>("productForms");
+        submissionsCollection = database.GetCollection<Submission>("submissions");
 
         //var productForm = productFormsCollection.Find(c => c.Id == new ObjectId("c9d52472-9263-4610-93ca-ce16ba02c4d")).First();
 
