@@ -4,18 +4,10 @@ namespace Rendelosch.Models;
 
 public class Submission
 {
-    [BsonId]
-    public readonly string Id;
+    public string Id { get; set; }
     
-    [BsonElement("formId")]
-    public readonly string FormId;
+    public string FormId { get; set; }
     
-    [BsonElement("fieldData")]
-    public readonly Dictionary<string, string> FieldData;
-
-    public Submission(string id, Dictionary<string, string> fieldData)
-    {
-        Id = id;
-        FieldData = fieldData;
-    }
+    public Dictionary<string, string> FieldData { get; set; }
+    
 }

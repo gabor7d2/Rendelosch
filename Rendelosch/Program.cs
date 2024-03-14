@@ -1,11 +1,14 @@
+using Bme.Swlab1.Mongo.Dal;
+using MongoDB.Driver;
+using Rendelosch.Dal.Repository;
 using Rendelosch.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
-builder.Services.AddSingleton<IProductFormRepository>(new MongoDBProductFormRepository());
+builder.Services.AddMongoConnection();
+builder.Services.AddSingleton<IProductFormRepository, MongoDbProductFormRepository>();
 
 var app = builder.Build();
 

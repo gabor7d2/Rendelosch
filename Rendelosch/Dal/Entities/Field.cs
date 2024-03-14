@@ -1,6 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace Rendelosch.Models;
+namespace Rendelosch.Dal.Entities;
 
 public class Field
 {

@@ -1,6 +1,6 @@
 ﻿using Rendelosch.Models;
 
-namespace Rendelosch.Repository;
+namespace Rendelosch.Dal.Repository;
 
 public interface IProductFormRepository
 {
@@ -13,5 +13,5 @@ public interface IProductFormRepository
     
     public List<Submission>? GetSubmissionsForProductForm(string formId);
     
-    public Submission? AddSubmissionToProductForm(string formId, Dictionary<string, string> fieldData);
+    public void AddSubmissionToProductForm(string formId, Dictionary<string, string> fieldData);
 }
