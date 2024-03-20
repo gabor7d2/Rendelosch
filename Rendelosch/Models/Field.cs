@@ -8,4 +8,5 @@ public class Field
     
     public string Name { get; set; }
     
+    public FieldType FieldType { get; set; }
 }
