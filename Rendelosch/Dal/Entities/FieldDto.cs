@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Rendelosch.Dal.Entities;
 
-public class Field
+public class FieldDto
 {
     public string Key { get; set; }
     

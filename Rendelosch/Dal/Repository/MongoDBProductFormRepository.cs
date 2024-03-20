@@ -8,28 +8,28 @@ namespace Rendelosch.Dal.Repository;
 
 public class MongoDbProductFormRepository : IProductFormRepository
 {
-    private readonly IMongoCollection<Entities.ProductForm> _productFormsCollection;
-    private readonly IMongoCollection<Entities.Submission> _submissionsCollection;
+    private readonly IMongoCollection<Entities.ProductFormDto> _productFormsCollection;
+    private readonly IMongoCollection<Entities.SubmissionDto> _submissionsCollection;
     
     public MongoDbProductFormRepository(IMongoDatabase database)
     {
 
-        _productFormsCollection = database.GetCollection<Entities.ProductForm>("productform");
-        _submissionsCollection = database.GetCollection<Entities.Submission>("submission");
+        _productFormsCollection = database.GetCollection<Entities.ProductFormDto>("productform");
+        _submissionsCollection = database.GetCollection<Entities.SubmissionDto>("submission");
 
         //TODO only test, remove it
-        _productFormsCollection.InsertOne(new Entities.ProductForm
+        _productFormsCollection.InsertOne(new Entities.ProductFormDto
         {
             Title = "teszt",
             Fields =
             [
-                new Entities.Field()
+                new Entities.FieldDto()
                 {
                     Key = "name",
                     Name = "Név"
                 },
 
-                new Entities.Field()
+                new Entities.FieldDto()
                 {
                     Key = "alma",
                     Name = "Alma"
@@ -39,10 +39,10 @@ public class MongoDbProductFormRepository : IProductFormRepository
     }
 
 
-    public List<ProductForm> GetProductForms()
+    public List<ProductFormModel> GetProductForms()
     {
         var dbProductsForms =  _productFormsCollection.Find(p => true).ToList();
-        return dbProductsForms.Select(p => new ProductForm
+        return dbProductsForms.Select(p => new ProductFormModel
             {
                 Id = p.Id.ToString(),
                 Fields = p.Fields.ToFieldModelsList(),
@@ -52,10 +52,10 @@ public class MongoDbProductFormRepository : IProductFormRepository
 
     }
 
-    public ProductForm? GetProductForm(string formId)
+    public ProductFormModel? GetProductForm(string formId)
     {
         var dbProductsForm =  _productFormsCollection.Find(p => p.Id.ToString() == formId).FirstOrDefault();
-        return new ProductForm
+        return new ProductFormModel
         {
             Id = dbProductsForm.Id.ToString(),
             Title = dbProductsForm.Title,
@@ -63,15 +63,15 @@ public class MongoDbProductFormRepository : IProductFormRepository
         };
     }
 
-    public ProductForm CreateProductForm(string formTitle, List<Field> formFields)
+    public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields)
     {
         throw new NotImplementedException();
     }
 
-    public List<Submission>? GetSubmissionsForProductForm(string formId)
+    public List<SubmissionModel>? GetSubmissionsForProductForm(string formId)
     {
         var dbSubmission = _submissionsCollection.Find(s => s.FormId.ToString() == formId).ToList();
-        return dbSubmission.Select(s => new Submission
+        return dbSubmission.Select(s => new SubmissionModel
             {
                 Id = s.Id.ToString(),
                 FormId = formId,
@@ -85,7 +85,7 @@ public class MongoDbProductFormRepository : IProductFormRepository
         if( _productFormsCollection.Find(p => p.Id.ToString() == formId).FirstOrDefault() is null ) return;
 
 
-        var submission = new Entities.Submission
+        var submission = new Entities.SubmissionDto
         {
             FieldData = fieldData,
             FormId = ObjectId.Parse(formId)

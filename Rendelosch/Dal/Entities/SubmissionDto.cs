@@ -1,16 +1,14 @@
-﻿using System.Collections;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Rendelosch.Dal.Entities;
 
-public class ProductForm
+public class SubmissionDto
 {
     public ObjectId Id { get; set; }
     
-    public string Title { get; set; }
-    
-    public List<Field> Fields { get; set; }
-    
+    public ObjectId FormId { get; set; }
+
+    public Dictionary<string, string> FieldData { get; set; } = new();
     
 }

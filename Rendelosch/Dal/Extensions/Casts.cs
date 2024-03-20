@@ -2,18 +2,18 @@
 
 public static class Casts
 {
-    public static Models.Field ToFieldModels(this Entities.Field field)
+    public static Models.FieldModel ToFieldModels(this Entities.FieldDto fieldDto)
     {
-        return new Models.Field
+        return new Models.FieldModel
         {
-            Key = field.Key,
-            Name = field.Name
+            Key = fieldDto.Key,
+            Name = fieldDto.Name
         };
     }
     
-    public static List<Models.Field> ToFieldModelsList(this List<Entities.Field> fields)
+    public static List<Models.FieldModel> ToFieldModelsList(this List<Entities.FieldDto> fields)
     {
-        List<Models.Field> list = new();
+        List<Models.FieldModel> list = new();
         foreach (var field in fields)
         {
             list.Add(ToFieldModels(field));
@@ -21,18 +21,18 @@ public static class Casts
         return list;
     }
     
-    public static Entities.Field ToFieldEntities(this Models.Field field)
+    public static Entities.FieldDto ToFieldEntities(this Models.FieldModel fieldModel)
     {
-        return new Entities.Field
+        return new Entities.FieldDto
         {
-            Key = field.Key,
-            Name = field.Name
+            Key = fieldModel.Key,
+            Name = fieldModel.Name
         };
     }
     
-    public static List<Entities.Field> ToFieldEntitiesList(this List<Models.Field> fields)
+    public static List<Entities.FieldDto> ToFieldEntitiesList(this List<Models.FieldModel> fields)
     {
-        List<Entities.Field> list = new();
+        List<Entities.FieldDto> list = new();
         foreach (var field in fields)
         {
             list.Add(ToFieldEntities(field));

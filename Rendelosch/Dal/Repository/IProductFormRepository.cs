@@ -4,14 +4,14 @@ namespace Rendelosch.Dal.Repository;
 
 public interface IProductFormRepository
 {
-    public List<ProductForm> GetProductForms();
+    public List<ProductFormModel> GetProductForms();
 
-    public ProductForm? GetProductForm(string formId);
+    public ProductFormModel? GetProductForm(string formId);
     
-    public ProductForm CreateProductForm(string formTitle, List<Field> formFields);
+    public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields);
     
     
-    public List<Submission>? GetSubmissionsForProductForm(string formId);
+    public List<SubmissionModel>? GetSubmissionsForProductForm(string formId);
     
     public void AddSubmissionToProductForm(string formId, Dictionary<string, string> fieldData);
 }
