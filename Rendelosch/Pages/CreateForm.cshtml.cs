@@ -15,19 +15,7 @@ public class CreateForm : PageModel
     
     public void OnPost()
     {
-        Request.Form.TryGetValue("formName", out var formName);
-        Request.Form.TryGetValue("fields", out var formFields);
-        
-        string name = formName.ToString();
-        string fields = formFields.ToString();
-        
-        List<Field> fieldsList = [];
-        foreach (string fieldData in fields.Split(','))
-        {
-            string[] fieldDataArray = fieldData.Split(';');
-            fieldsList.Add(new Field(fieldDataArray[0], fieldDataArray[1]));
-        }
-
-        Repository.CreateProductForm(name, fieldsList);
+        Request.Form.TryGetValue("title", out var title);
+        Console.WriteLine($"The form's title is: {title})");
     }
 }
