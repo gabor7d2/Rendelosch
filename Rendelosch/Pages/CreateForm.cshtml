@@ -3,67 +3,143 @@
 @model Rendelosch.Pages.CreateForm
 
 @{
-    ViewData["Title"] = "CreateForm";
+    ViewData["Title"] = "Új űrlap létrehozás";
 }
 
-<div class="container-lg mt-4">
-    <form method="post">
+<div class="container-lg mt-4 d-flex flex-row column-gap-5">
+    @* Form editor *@
+    <div class="w-50 d-flex flex-column">
+        <p class="h3 mb-4 text-center">Űrlap adatai</p>
+        <div class="mb-4">
+            <label for="formTitleInput" class="form-label h5">Űrlap neve</label>
+            <input type="text" id="formTitleInput" class="form-control">
+        </div>
+        <div class="mb-4">
+            <label for="formFromDateInput" class="form-label h5">Kitöltési időszak</label>
+            <div class="input-group mb-1">
+                <input type="date" id="formFromDateInput" class="form-control"/>
+                <input type="time" id="formFromTimeInput" class="form-control"/>
+                <span class="input-group-text">-tól/-től</span>
+            </div>
+            <div class="input-group">
+                <input type="date" id="formToDateInput" class="form-control"/>
+                <input type="time" id="formToTimeInput" class="form-control"/>
+                <span class="input-group-text">-ig</span>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="formFieldName" class="form-label h5">Új mező</label>
+            <input type="text" id="formFieldId" placeholder="Azonosító (pl.: abc_def, xyz)" class="form-control  mb-1"/>
+            <input type="text" id="formFieldName" placeholder="Megnevezés (pl.: Méret, Mennyiség)" class="form-control mb-1"/>
+            <button type="button" class="btn btn-sm btn-outline-primary" disabled>+ mező hozzáadása</button>
+        </div>
+        <button id="submitButton" class="mt-auto btn btn-primary" disabled>
+            Űrlap létrehozása
+        </button>
+    </div>
+    
+    @* Form preview *@
+    <div class="w-50 d-flex flex-column">
+        <p class="h3 mb-4 text-center">Előnézet</p>
         <div class="card">
-            <div class="card-body row">
-                <div class="col col-6">
-                    <label for="formName" class="form-label">Űrlap neve</label>
-                    <input type="text" name="formName" id="formName" class="form-control" aria-describedby="formNameHelp">
-                    <div id="formNameHelp" class="form-text">
-                        Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+            <div class="card-header text-center h4">
+                Az űrlap neve
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div>
+                        <label for="formTitleInput" class="form-label">Mező 1</label>
+                        <input type="text" class="form-control form-control-sm">
                     </div>
-                    <input type="submit" name="Űrlap létrehozása" class="mt-auto"/>
                 </div>
-                <div class="col col-6">
-                    <label for="fieldName" class="form-label">Új mező</label>
-                    <div class="input-group">
-                        <input type="text" id="fieldId" class="form-control" placeholder="Azonosító">
-                        <input type="text" id="fieldName" class="form-control" placeholder="Megnevezés" aria-describedby="formNameHelp">
-                        <button class="btn btn-outline-primary" type="button" onclick="addField()">+ Hozzáadás</button>
+                <div class="mb-3">
+                    <div>
+                        <label for="formTitleInput" class="form-label">Mező 2</label>
+                        <input type="text" class="form-control form-control-sm">
                     </div>
-                    <div id="fieldNameHelp" class="form-text mb-4">
-                        Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+                </div>
+                <div class="mb-3">
+                    <div>
+                        <label for="formTitleInput" class="form-label">Mező 3</label>
+                        <input type="text" class="form-control form-control-sm">
                     </div>
-                    <label id="fieldsLabel" class="form-label">Mezők (0 db)</label>
-                    <div id="fields" class="d-flex flex-column gap-2"></div>
+                </div>
+                <p class="mb-3"><small>A beküldésre még várnod kell <b>3</b> napot. Az űrlap kitöltésére <b>36</b> napon keresztül lesz lehetőséged.</small></p>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-danger btn-sm me-3">Újra kezdés</button>
+                    <button type="button" class="btn btn-success btn-sm">Beadás</button>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+    @*     <div class="w-50"> *@
+    @*         <label id="fieldsLabel" class="form-label">Mezők (0 db)</label> *@
+    @*         <div id="fields" class="d-flex flex-column gap-2"></div> *@
+    @*         <hr/> *@
+    @*         <label for="fieldName" class="form-label">Új mező</label> *@
+    @*         <div class="input-group"> *@
+    @*             <input type="text" id="fieldId" class="form-control" placeholder="Azonosító"> *@
+    @*             <input type="text" id="fieldName" class="form-control" placeholder="Megnevezés" aria-describedby="formNameHelp"> *@
+    @*             <button class="btn btn-outline-primary" type="button" onclick="addField()">+ Hozzáadás</button> *@
+    @*         </div> *@
+    @*         <div id="fieldNameHelp" class="form-text mb-4"> *@
+    @*             <p class="mb-0"> *@
+    @*                 Az <b>Azonosító</b> csak kis betűket (a-z), számokat (0-9) és aláhúzást (_) tartalmazhat. Ez a beküldők számára nem látható. Csak belső azonosításra szolgál. *@
+    @*             </p> *@
+    @*             <p> *@
+    @*                 A <b>Megnevezés</b> bármilyen karaktert tartalmazhat, kívéve vessző (,) és pontosvesszőt (;). Ez látható a beküldők számára. *@
+    @*             </p> *@
+    @*         </div> *@
+    @*     </div> *@
 </div>
 
-<script>
-    let numberOfFields = 0;
-
-    function addField() {
-        // Get input fields
-        const input_id = document.getElementById("fieldId"); // ID of the field
-        const input_name = document.getElementById("fieldName"); // Name of the field
-        const fields = document.getElementById("fields"); // Div for displayed fields
-        const fields_label = document.getElementById("fieldsLabel"); // Label for displayed fields
-        
-        // Displayed field
-        const field_div = document.createElement("div");
-        field_div.innerHTML = "<p class='mb-0'>" + input_name.value + " (ID: " + input_id.value + ")</p>";
-        fields.appendChild(field_div);
-        
-        // Hidden input field for each created fields
-        const field_hidden = document.createElement("input");
-        field_hidden.type = "hidden";
-        field_hidden.name = "fields";
-        field_hidden.value = input_id.value + ";" + input_name.value;
-        field_div.appendChild(field_hidden);
-        
-        // Update number of fields label
-        numberOfFields++;
-        fields_label.innerHTML = "Mezők (" + numberOfFields + " db)";
-        
-        // Clear input fields
-        input_id.value = "";
-        input_name.value = "";
-    }
-</script>
+@* <script> *@
+@*     let formData = new FormData(); *@
+@*     let numberOfFields = 0; *@
+@* *@
+@*     function addField() { *@
+@*         // Get input fields *@
+@*         const input_id = document.getElementById("fieldId"); // ID of the field *@
+@*         const input_name = document.getElementById("fieldName"); // Name of the field *@
+@*         const fields = document.getElementById("fields"); // Div for displayed fields *@
+@*         const fields_label = document.getElementById("fieldsLabel"); // Label for displayed fields *@
+@*          *@
+@*         // Displayed field *@
+@*         const field_div = document.createElement("div"); *@
+@*         field_div.innerHTML = "<p class='mb-0'>" + input_name.value + " (ID: " + input_id.value + ")</p>"; *@
+@*         fields.appendChild(field_div); *@
+@*          *@
+@*         // Add field to form data *@
+@*         numberOfFields++; *@
+@*         formData.append("fields", input_id.value + ";" + input_name.value); *@
+@*         fields_label.innerHTML = "Mezők (" + numberOfFields + " db)"; *@
+@*          *@
+@*         // Clear input fields *@
+@*         input_id.value = ""; *@
+@*         input_name.value = ""; *@
+@*          *@
+@*         // Check if submit button should be enabled *@
+@*         const submitButton = document.getElementById("submitButton"); *@
+@*         submitButton.disabled = numberOfFields === 0; *@
+@*     } *@
+@*      *@
+@*     async function submitForm() { *@
+@*         formData.set("formName", document.getElementById("formName").value); *@
+@*          *@
+@*         try { *@
+@*             const response = await fetch("/CreateForm", { *@
+@*               method: "POST", *@
+@*               body: formData, *@
+@*             }); *@
+@*             if (response.ok) { *@
+@*                 window.location.href = "/"; *@
+@*             } else { *@
+@*               console.error("Server error: " + response.status); *@
+@*               alert("Server error: " + response.status) *@
+@*             } *@
+@*           } catch (e) { *@
+@*             console.error(e); *@
+@*             console.error("Server error: " + e); *@
+@*           } *@
+@*     } *@
+@* </script> *@
