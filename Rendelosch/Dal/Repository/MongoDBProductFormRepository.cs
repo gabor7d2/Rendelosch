@@ -26,7 +26,7 @@ public class MongoDbProductFormRepository : IProductFormRepository
                 new Entities.FieldDto()
                 {
                     Key = "name",
-                    Name = "Név"
+                    Name = "Név",
                 },
 
                 new Entities.FieldDto()
@@ -34,7 +34,9 @@ public class MongoDbProductFormRepository : IProductFormRepository
                     Key = "alma",
                     Name = "Alma"
                 }
-            ]
+            ],
+            EndDate = DateTime.MaxValue,
+            StartDate = DateTime.MinValue
         });
     }
 
