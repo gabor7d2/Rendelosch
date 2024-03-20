@@ -2,7 +2,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Rendelosch.Models;
 
-public class Submission
+public class SubmissionModel
 {
     public string Id { get; set; }
     

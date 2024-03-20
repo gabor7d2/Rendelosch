@@ -2,7 +2,7 @@
 
 namespace Rendelosch.Models;
 
-public class Field
+public class FieldModel
 {
     public string Key { get; set; }
     
