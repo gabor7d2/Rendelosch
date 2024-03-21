@@ -8,22 +8,22 @@
 
 <div class="container-lg mt-4 d-flex flex-row column-gap-5">
     @* Form editor *@
-    <div class="w-50 d-flex flex-column mb-4">
+    <form method="post" id="form" class="w-50 d-flex flex-column mb-4">
         <p class="h3 mb-4 text-center">Űrlap adatai</p>
         <div class="mb-4">
             <label for="formTitleInput" class="form-label h5">Űrlap neve</label>
-            <input type="text" id="formTitleInput" class="form-control">
+            <input type="text" id="formTitleInput" name="form_title" class="form-control">
         </div>
         <div class="mb-4">
             <label for="formFromDateInput" class="form-label h5">Kitöltési időszak</label>
             <div class="input-group mb-1">
-                <input type="date" id="formFromDateInput" class="form-control"/>
-                <input type="time" id="formFromTimeInput" class="form-control"/>
+                <input type="date" id="formFromDateInput" name="form_from_date" class="form-control"/>
+                <input type="time" id="formFromTimeInput" name="form_from_time" class="form-control"/>
                 <span class="input-group-text">-tól/-től</span>
             </div>
             <div class="input-group">
-                <input type="date" id="formToDateInput" class="form-control"/>
-                <input type="time" id="formToTimeInput" class="form-control"/>
+                <input type="date" id="formToDateInput" name="form_to_date" oninput="updatePreview()" class="form-control"/>
+                <input type="time" id="formToTimeInput" name="form_to_time" oninput="updatePreview()" class="form-control"/>
                 <span class="input-group-text">-ig</span>
             </div>
         </div>
@@ -33,15 +33,13 @@
             <input type="text" id="formFieldName" placeholder="Megnevezés (pl.: Méret, Mennyiség)" class="form-control mb-1"/>
             <button type="button" id="formNewFieldButton" class="btn btn-sm btn-outline-primary" onclick="addField()">+ mező hozzáadása</button>
         </div>
-        <button id="submitButton" class="mt-auto btn btn-primary" onclick="submitForm()">
-            Űrlap létrehozása
-        </button>
-    </div>
+        <input type="submit" id="submitButton" value="Űrlap létrehozása" class="mt-auto btn btn-primary" />
+    </form>
     
     @* Form preview *@
     <div class="w-50 d-flex flex-column mb-4">
         <p class="h3 mb-4 text-center">Előnézet</p>
-        <div id="formPreview" class="card" />
+        <div id="formPreview" class="card"></div>
     </div>
 </div>
 
@@ -75,6 +73,11 @@
         updateButtons();
     });
     
+    document.getElementById("form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        submitForm();
+    });
+    
     //-- Functions --//
     
     function updateButtons() {
@@ -85,6 +88,8 @@
     function updatePreview() {
         const formPreview = document.getElementById("formPreview");
         const formTitle = document.getElementById("formTitleInput").value;
+        const formToDate = document.getElementById("formToDateInput").value;
+        const formToTime = document.getElementById("formToTimeInput").value;
         
         let preview = "";
         
@@ -102,15 +107,21 @@
         formFields.forEach(field => {
             preview += `
                 <div class="mb-3">
-                    <label class="form-label">${field.name}</label>
+                    <label class="form-label">${field.name} <span class="text-body-secondary">(${field.id})</span></label>
                     <input type="text" class="form-control form-control-sm">
                 </div>
             `;
         });
         
+        // Calculate end time text
+        if (formToDate.length > 0) {
+            preview += `
+                <p class="mb-3"><small>Az űrlapot legkésőbb <b>${formToDate} ${formToTime.length > 0 ? formToTime : "23:59"}</b>-ig lehet beküldeni.</small></p>
+            `;
+        }
+        
         // Add form end
         preview += `
-                <p class="mb-3"><small>A beküldésre még várnod kell <b>##</b> napot. Az űrlap kitöltésére <b>##</b> napon keresztül lesz lehetőséged.</small></p>
                 <div class="d-flex justify-content-end">
                     <button type="button" class="btn btn-outline-danger btn-sm me-3">Újra kezdés</button>
                     <button type="button" class="btn btn-success btn-sm">Beadás</button>
@@ -137,35 +148,18 @@
     }
     
     async function submitForm() {
-        const formTitle = document.getElementById("formTitleInput").value;
-        const formFromDate = document.getElementById("formFromDateInput").value + " " + document.getElementById("formFromTimeInput").value;
-        const formToDate = document.getElementById("formToDateInput").value + " " + document.getElementById("formToTimeInput").value;
+        const formData = new FormData(document.getElementById("form"));
+        formData.append("form_fields", formFields.map(f => `${f.id}:${f.name}`).join(";"));
         
-        let formData = new FormData();
-        formData.set("title", formTitle);
-        formData.set("fromDate", formFromDate);
-        formData.set("toDate", formToDate);
-        formData.set("fields", formFields.map((f => `${f.id}:${f.name}`)).join(";"));
-        
-        console.log(formData);
-        
-        try { 
-            const response = await fetch("/CreateForm", { 
-                method: "POST", 
-                body: formData,
-            }); 
-            
-            let responseJson = await response.json();
-            console.log(responseJson);
-            if (responseJson.ok) {
-                alert(`A(z) ${formTitle} űrlap sikeresen létrehozva!`);
-                window.location.href = "/";
-            } else { 
-                console.error(response);
-                alert("Hiba történt a létrehozáskor!");
-            } 
+        try {
+            const response = await fetch("/CreateForm", {
+              method: "POST",
+              body: formData,
+            });
+            console.log(await response.json());
         } catch (e) {
-            console.error("Server error: ", e); 
+            console.error(e);
+            alert("JS error: " + e.message)
         }
     }
     
