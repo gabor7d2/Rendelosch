@@ -3,42 +3,18 @@ using MongoDB.Driver;
 using Rendelosch.Dal.Entities;
 using Rendelosch.Dal.Extensions;
 using Rendelosch.Models;
-using Rendelosch.Repository;
 
 namespace Rendelosch.Dal.Repository;
 
 public class MongoDbProductFormRepository : IProductFormRepository
 {
-    private readonly IMongoCollection<Entities.ProductFormEntity> _productFormsCollection;
-    private readonly IMongoCollection<Entities.SubmissionEntity> _submissionsCollection;
+    private readonly IMongoCollection<ProductFormEntity> _productFormsCollection;
+    private readonly IMongoCollection<SubmissionEntity> _submissionsCollection;
     
     public MongoDbProductFormRepository(IMongoDatabase database)
     {
-
-        _productFormsCollection = database.GetCollection<Entities.ProductFormEntity>("productform");
-        _submissionsCollection = database.GetCollection<Entities.SubmissionEntity>("submission");
-
-        //TODO only test, remove it
-        _productFormsCollection.InsertOne(new Entities.ProductFormEntity
-        {
-            Title = "teszt",
-            Fields =
-            [
-                new Entities.FieldEntity()
-                {
-                    Key = "name",
-                    Name = "Név",
-                },
-
-                new Entities.FieldEntity()
-                {
-                    Key = "alma",
-                    Name = "Alma"
-                }
-            ],
-            EndDate = DateTime.MaxValue,
-            StartDate = DateTime.MinValue
-        });
+        _productFormsCollection = database.GetCollection<ProductFormEntity>("productform");
+        _submissionsCollection = database.GetCollection<SubmissionEntity>("submission");
     }
 
 
@@ -77,8 +53,8 @@ public class MongoDbProductFormRepository : IProductFormRepository
         {
             Title = formTitle,
             Fields = fields,
-            StartDate = DateTime.MinValue,
-            EndDate = DateTime.MaxValue
+            StartDate = startDate,
+            EndDate = endDate
         };
         _productFormsCollection.InsertOne(form);
 
@@ -110,7 +86,7 @@ public class MongoDbProductFormRepository : IProductFormRepository
         if( _productFormsCollection.Find(p => p.Id.ToString() == formId).FirstOrDefault() is null ) return;
 
 
-        var submission = new Entities.SubmissionEntity
+        var submission = new SubmissionEntity
         {
             FieldData = fieldData,
             ProductFormId = ObjectId.Parse(formId)

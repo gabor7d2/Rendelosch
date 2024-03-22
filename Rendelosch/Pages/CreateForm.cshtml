@@ -1,5 +1,4 @@
 @page
-@using Rendelosch.Models
 @model Rendelosch.Pages.CreateForm
 
 @{
@@ -22,8 +21,8 @@
                 <span class="input-group-text">-tól/-től</span>
             </div>
             <div class="input-group">
-                <input type="date" id="formToDateInput" name="form_to_date" oninput="updatePreview()" class="form-control"/>
-                <input type="time" id="formToTimeInput" name="form_to_time" oninput="updatePreview()" class="form-control"/>
+                <input type="date" id="formToDateInput" name="form_to_date" class="form-control"/>
+                <input type="time" id="formToTimeInput" name="form_to_time" class="form-control"/>
                 <span class="input-group-text">-ig</span>
             </div>
         </div>
@@ -31,7 +30,7 @@
             <label for="formFieldName" class="form-label h5">Új mező</label>
             <input type="text" id="formFieldId" placeholder="Azonosító (pl.: abc_def, xyz)" class="form-control  mb-1"/>
             <input type="text" id="formFieldName" placeholder="Megnevezés (pl.: Méret, Mennyiség)" class="form-control mb-1"/>
-            <button type="button" id="formNewFieldButton" class="btn btn-sm btn-outline-primary" onclick="addField()">+ mező hozzáadása</button>
+            <button type="button" id="formNewFieldButton" class="btn btn-sm btn-outline-primary">+ mező hozzáadása</button>
         </div>
         <input type="submit" id="submitButton" value="Űrlap létrehozása" class="mt-auto btn btn-primary" />
     </form>
@@ -43,128 +42,4 @@
     </div>
 </div>
 
-<script>
-    //-- In-browser variables --//
-    
-    const regex_fieldId = /^[a-z0-9_]+$/;
-    const regex_fieldName = /^[^:;]+$/;
-    
-    let formTitle_valid = false;
-    let formFieldId_valid = false;
-    let formFieldName_valid = false;
-    
-    let formFields = [];
-    
-    //-- Event listeners --//
-    
-    document.getElementById("formTitleInput").addEventListener("input", function() {
-        formTitle_valid = this.value.length > 0;
-        updatePreview();
-        updateButtons();
-    });
-    
-    document.getElementById("formFieldId").addEventListener("input", function() {
-        formFieldId_valid=!(this.value.length < 1 || !regex_fieldId.test(this.value));
-        updateButtons();
-    });
-    
-    document.getElementById("formFieldName").addEventListener("input", function() {
-        formFieldName_valid=!(this.value.length < 1 || !regex_fieldName.test(this.value));
-        updateButtons();
-    });
-    
-    document.getElementById("form").addEventListener("submit", function(e) {
-        e.preventDefault();
-        submitForm();
-    });
-    
-    //-- Functions --//
-    
-    function updateButtons() {
-        document.getElementById("formNewFieldButton").disabled = !(formFieldId_valid && formFieldName_valid);
-        document.getElementById("submitButton").disabled = !(formTitle_valid && formFields.length > 0);
-    }
-    
-    function updatePreview() {
-        const formPreview = document.getElementById("formPreview");
-        const formTitle = document.getElementById("formTitleInput").value;
-        const formToDate = document.getElementById("formToDateInput").value;
-        const formToTime = document.getElementById("formToTimeInput").value;
-        
-        let preview = "";
-        
-        // Clear the preview
-        formPreview.innerHTML = "";
-        
-        // Add form title
-        preview += `
-            <div class="card">
-                <div class="card-header text-center h4">${formTitle}</div>
-                <div class="card-body">
-        `;
-        
-        // Add form fields
-        formFields.forEach(field => {
-            preview += `
-                <div class="mb-3">
-                    <label class="form-label">${field.name} <span class="text-body-secondary">(${field.id})</span></label>
-                    <input type="text" class="form-control form-control-sm">
-                </div>
-            `;
-        });
-        
-        // Calculate end time text
-        if (formToDate.length > 0) {
-            preview += `
-                <p class="mb-3"><small>Az űrlapot legkésőbb <b>${formToDate} ${formToTime.length > 0 ? formToTime : "23:59"}</b>-ig lehet beküldeni.</small></p>
-            `;
-        }
-        
-        // Add form end
-        preview += `
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-danger btn-sm me-3">Újra kezdés</button>
-                    <button type="button" class="btn btn-success btn-sm">Beadás</button>
-                </div>
-            </div>
-        </div>
-        `;
-        
-        formPreview.innerHTML = preview;
-    }
-    
-    function addField() {
-        const fieldId = document.getElementById("formFieldId").value;
-        const fieldName = document.getElementById("formFieldName").value;
-        
-        formFields.push({ id: fieldId, name: fieldName });
-        updatePreview();
-        
-        document.getElementById("formFieldId").value = "";
-        document.getElementById("formFieldName").value = "";
-        formFieldId_valid = false;
-        formFieldName_valid = false;
-        updateButtons();
-    }
-    
-    async function submitForm() {
-        const formData = new FormData(document.getElementById("form"));
-        formData.append("form_fields", formFields.map(f => `${f.id}:${f.name}`).join(";"));
-        
-        try {
-            const response = await fetch("/CreateForm", {
-              method: "POST",
-              body: formData,
-            });
-            console.log(await response.json());
-        } catch (e) {
-            console.error(e);
-            alert("JS error: " + e.message)
-        }
-    }
-    
-    //-- Initial setup --//
-    
-    updateButtons();
-    updatePreview();
-</script>
+<script src="scripts/CreateForm.js"></script>

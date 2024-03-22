@@ -1,6 +1,4 @@
-using System.Runtime.InteropServices.JavaScript;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.VisualBasic.CompilerServices;
 using Rendelosch.Dal.Repository;
 using Rendelosch.Models;
 
@@ -40,9 +38,8 @@ public class CreateForm : PageModel
         if (fromTime == "") fromTime = "23:59";
         if (toTime == "") toTime = "23:59";
 
-        var startDate = fromTime != "" ? ToDate(fromDate, fromTime) : DateTime.Now;
-        var endDate = toTime != "" ? ToDate(fromDate, fromTime) : DateTime.MaxValue;
-        //var endDate = ToDate(toDate, toTime);
+        var startDate = fromTime != "" ? ToDate(fromDate!, fromTime!) : DateTime.Now;
+        var endDate = toTime != "" ? ToDate(toDate!, toTime!) : DateTime.MaxValue;
         
         Repository.CreateProductForm(title.ToString(), fieldsList, startDate, endDate);
         
@@ -52,7 +49,8 @@ public class CreateForm : PageModel
     private static DateTime ToDate(string date, string time)
     {
         var formattedDate = date.Split("-");
-        var formattedTime = date.Split(":");
+        Console.WriteLine(formattedDate[0] + " " + formattedDate[1] + " " + formattedDate[2]);
+        var formattedTime = time.Split(":");
         return new DateTime(
             int.Parse(formattedDate[0]),
             int.Parse(formattedDate[1]),
