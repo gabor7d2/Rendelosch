@@ -22,11 +22,15 @@ public class CreateForm : PageModel
         Request.Form.TryGetValue("form_to_time", out var toTime);
         Request.Form.TryGetValue("form_fields", out var fields);
         
-        Console.WriteLine($"The form's title is: {title}");
-        Console.WriteLine($"The form's from date is: {fromDate}");
-        Console.WriteLine($"The form's from time is: {fromTime}");
-        Console.WriteLine($"The form's to date is: {toDate}");
-        Console.WriteLine($"The form's to time is: {toTime}");
-        Console.WriteLine($"The form's fields are: {fields}");
+        List<Field> fieldsList = [];
+        foreach (var fieldString in fields.ToString().Split(';'))
+        {
+            var field = fieldString.Split(':');
+            fieldsList.Add(new Field(field[0], field[1]));
+        }
+
+        Repository.CreateProductForm(title.ToString(), fieldsList);
+        
+        Response.Redirect("/");
     }
 }
