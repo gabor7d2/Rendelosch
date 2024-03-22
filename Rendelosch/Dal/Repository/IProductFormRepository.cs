@@ -8,7 +8,7 @@ public interface IProductFormRepository
 
     public ProductFormModel? GetProductForm(string formId);
     
-    public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields);
+    public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields, DateTime startDate, DateTime endDate);
     
     
     public List<SubmissionModel>? GetSubmissionsForProductForm(string formId);

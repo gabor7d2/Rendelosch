@@ -66,7 +66,7 @@ public class MongoDbProductFormRepository : IProductFormRepository
         };
     }
 
-    public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields)
+    public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields, DateTime startDate, DateTime endDate)
     {
         List<FieldEntity> fields = formFields.Select(f => new FieldEntity
         {
@@ -87,7 +87,9 @@ public class MongoDbProductFormRepository : IProductFormRepository
         {
             Id = lastInsertedForm.Id.ToString(),
             Title = lastInsertedForm.Title,
-            Fields = lastInsertedForm.Fields.ToFieldModelList()
+            Fields = lastInsertedForm.Fields.ToFieldModelList(),
+            StartDate = lastInsertedForm.StartDate,
+            EndDate = lastInsertedForm.EndDate
         };
     }
 
@@ -114,6 +116,5 @@ public class MongoDbProductFormRepository : IProductFormRepository
             ProductFormId = ObjectId.Parse(formId)
         };
         _submissionsCollection.InsertOne(submission);
-        //return submission;
     }
 }
