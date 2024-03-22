@@ -38,8 +38,8 @@ public class CreateForm : PageModel
         if (fromTime == "") fromTime = "23:59";
         if (toTime == "") toTime = "23:59";
 
-        var startDate = fromTime != "" ? ToDate(fromDate!, fromTime!) : DateTime.Now;
-        var endDate = toTime != "" ? ToDate(toDate!, toTime!) : DateTime.MaxValue;
+        var startDate = fromDate != "" ? ToDate(fromDate!, fromTime!) : DateTime.Now;
+        var endDate = toDate != "" ? ToDate(toDate!, toTime!) : DateTime.MaxValue;
         
         Repository.CreateProductForm(title.ToString(), fieldsList, startDate, endDate);
         
@@ -49,7 +49,6 @@ public class CreateForm : PageModel
     private static DateTime ToDate(string date, string time)
     {
         var formattedDate = date.Split("-");
-        Console.WriteLine(formattedDate[0] + " " + formattedDate[1] + " " + formattedDate[2]);
         var formattedTime = time.Split(":");
         return new DateTime(
             int.Parse(formattedDate[0]),
