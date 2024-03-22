@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Rendelosch.Dal.Entities;
 using Rendelosch.Dal.Extensions;
 using Rendelosch.Models;
 using Rendelosch.Repository;
@@ -67,7 +68,27 @@ public class MongoDbProductFormRepository : IProductFormRepository
 
     public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields)
     {
-        throw new NotImplementedException();
+        List<FieldDto> fields = formFields.Select(f => new FieldDto
+        {
+            Key = f.Key,
+            Name = f.Name
+        }).ToList();
+        ProductFormDto form = new()
+        {
+            Title = formTitle,
+            Fields = fields,
+            StartDate = DateTime.MinValue,
+            EndDate = DateTime.MaxValue
+        };
+        _productFormsCollection.InsertOne(form);
+
+        ProductFormDto lastInsertedForm = _productFormsCollection.Find(_ => true).SortByDescending(f => f.Id).Limit(1).FirstOrDefault();
+        return new ProductFormModel
+        {
+            Id = lastInsertedForm.Id.ToString(),
+            Title = lastInsertedForm.Title,
+            Fields = lastInsertedForm.Fields.ToFieldModelsList()
+        };
     }
 
     public List<SubmissionModel>? GetSubmissionsForProductForm(string formId)

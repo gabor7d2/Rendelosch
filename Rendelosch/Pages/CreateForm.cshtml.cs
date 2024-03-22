@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Rendelosch.Dal.Repository;
 using Rendelosch.Models;
-using Rendelosch.Repository;
 
 namespace Rendelosch.Pages;
 
@@ -22,11 +22,16 @@ public class CreateForm : PageModel
         Request.Form.TryGetValue("form_to_time", out var toTime);
         Request.Form.TryGetValue("form_fields", out var fields);
         
-        List<Field> fieldsList = [];
+        List<FieldModel> fieldsList = [];
         foreach (var fieldString in fields.ToString().Split(';'))
         {
             var field = fieldString.Split(':');
-            fieldsList.Add(new Field(field[0], field[1]));
+            fieldsList.Add(new FieldModel
+            {
+                Key = field[0],
+                Name = field[1],
+                FieldType = FieldType.TEXT
+            });
         }
 
         Repository.CreateProductForm(title.ToString(), fieldsList);
