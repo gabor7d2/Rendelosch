@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
 
 namespace Rendelosch.Dal.Entities;
 
-public class ProductFormDto
+public class ProductFormEntity
 {
     public ObjectId Id { get; set; }
     
@@ -14,7 +12,7 @@ public class ProductFormDto
 
     public DateTime EndDate { get; set; }
     
-    public List<FieldDto> Fields { get; set; }
+    public List<FieldEntity> Fields { get; set; }
     
     
 }

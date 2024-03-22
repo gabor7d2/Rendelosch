@@ -6,7 +6,7 @@ public class SubmissionModel
 {
     public string Id { get; set; }
     
-    public string FormId { get; set; }
+    public string ProductFormId { get; set; }
     
     public Dictionary<string, string> FieldData { get; set; }
     

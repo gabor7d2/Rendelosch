@@ -9,28 +9,28 @@ namespace Rendelosch.Dal.Repository;
 
 public class MongoDbProductFormRepository : IProductFormRepository
 {
-    private readonly IMongoCollection<Entities.ProductFormDto> _productFormsCollection;
-    private readonly IMongoCollection<Entities.SubmissionDto> _submissionsCollection;
+    private readonly IMongoCollection<Entities.ProductFormEntity> _productFormsCollection;
+    private readonly IMongoCollection<Entities.SubmissionEntity> _submissionsCollection;
     
     public MongoDbProductFormRepository(IMongoDatabase database)
     {
 
-        _productFormsCollection = database.GetCollection<Entities.ProductFormDto>("productform");
-        _submissionsCollection = database.GetCollection<Entities.SubmissionDto>("submission");
+        _productFormsCollection = database.GetCollection<Entities.ProductFormEntity>("productform");
+        _submissionsCollection = database.GetCollection<Entities.SubmissionEntity>("submission");
 
         //TODO only test, remove it
-        _productFormsCollection.InsertOne(new Entities.ProductFormDto
+        _productFormsCollection.InsertOne(new Entities.ProductFormEntity
         {
             Title = "teszt",
             Fields =
             [
-                new Entities.FieldDto()
+                new Entities.FieldEntity()
                 {
                     Key = "name",
                     Name = "Név",
                 },
 
-                new Entities.FieldDto()
+                new Entities.FieldEntity()
                 {
                     Key = "alma",
                     Name = "Alma"
@@ -48,7 +48,7 @@ public class MongoDbProductFormRepository : IProductFormRepository
         return dbProductsForms.Select(p => new ProductFormModel
             {
                 Id = p.Id.ToString(),
-                Fields = p.Fields.ToFieldModelsList(),
+                Fields = p.Fields.ToFieldModelList(),
                 Title = p.Title
             }
         ).ToList();
@@ -62,18 +62,18 @@ public class MongoDbProductFormRepository : IProductFormRepository
         {
             Id = dbProductsForm.Id.ToString(),
             Title = dbProductsForm.Title,
-            Fields = dbProductsForm.Fields.ToFieldModelsList()
+            Fields = dbProductsForm.Fields.ToFieldModelList()
         };
     }
 
     public ProductFormModel CreateProductForm(string formTitle, List<FieldModel> formFields)
     {
-        List<FieldDto> fields = formFields.Select(f => new FieldDto
+        List<FieldEntity> fields = formFields.Select(f => new FieldEntity
         {
             Key = f.Key,
             Name = f.Name
         }).ToList();
-        ProductFormDto form = new()
+        ProductFormEntity form = new()
         {
             Title = formTitle,
             Fields = fields,
@@ -82,22 +82,22 @@ public class MongoDbProductFormRepository : IProductFormRepository
         };
         _productFormsCollection.InsertOne(form);
 
-        ProductFormDto lastInsertedForm = _productFormsCollection.Find(_ => true).SortByDescending(f => f.Id).Limit(1).FirstOrDefault();
+        ProductFormEntity lastInsertedForm = _productFormsCollection.Find(_ => true).SortByDescending(f => f.Id).Limit(1).FirstOrDefault();
         return new ProductFormModel
         {
             Id = lastInsertedForm.Id.ToString(),
             Title = lastInsertedForm.Title,
-            Fields = lastInsertedForm.Fields.ToFieldModelsList()
+            Fields = lastInsertedForm.Fields.ToFieldModelList()
         };
     }
 
     public List<SubmissionModel>? GetSubmissionsForProductForm(string formId)
     {
-        var dbSubmission = _submissionsCollection.Find(s => s.FormId.ToString() == formId).ToList();
+        var dbSubmission = _submissionsCollection.Find(s => s.ProductFormId.ToString() == formId).ToList();
         return dbSubmission.Select(s => new SubmissionModel
             {
                 Id = s.Id.ToString(),
-                FormId = formId,
+                ProductFormId = formId,
                 FieldData = s.FieldData
             }
         ).ToList();
@@ -108,10 +108,10 @@ public class MongoDbProductFormRepository : IProductFormRepository
         if( _productFormsCollection.Find(p => p.Id.ToString() == formId).FirstOrDefault() is null ) return;
 
 
-        var submission = new Entities.SubmissionDto
+        var submission = new Entities.SubmissionEntity
         {
             FieldData = fieldData,
-            FormId = ObjectId.Parse(formId)
+            ProductFormId = ObjectId.Parse(formId)
         };
         _submissionsCollection.InsertOne(submission);
         //return submission;
